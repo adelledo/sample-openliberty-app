@@ -1,37 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug">
-    <Properties>
-        <Property name="basePath">$${env:app_log_dir:-/logs}</Property>
-    </Properties>
+<Configuration>
+  <Properties>
+           <Property name="log-path">/logs</Property>
+  </Properties>
 
-    <Appenders>
-        <RollingFile name="sample-app" fileName="${basePath}/sample-app.log"
-                     filePattern="${basePath}/sample-app-$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout>
-                <Pattern>%d [%t] %p %c - %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="500 MB" />
-            </Policies>
-            <DefaultRolloverStrategy max="20" />
-        </RollingFile>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %c %highlight{%level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} - %msg%n" />
-        </Console>
-    </Appenders>
-    <Loggers>
-        <Logger name="io.openliberty.sample" level="debug" additivity="false">
-            <AppenderRef ref="sample-app" level="debug" />
-            <AppenderRef ref="Console" level="debug" />
-        </Logger>
-        <Logger name="com.americafirst.security" level="debug" additivity="false">
-            <AppenderRef ref="sample-app" level="debug" />
-            <AppenderRef ref="Console" level="debug" />
-        </Logger>
-        <Root level="debug" includeLocation="false">
-            <AppenderRef ref="Console" />
-            <AppenderRef ref="sample-app" />
-        </Root>
-    </Loggers>
+  <Appenders>
+    <RollingFile name="DailyRolling" fileName="${log-path}/sample-app.log" append="true"
+    filePattern="${log-path}/sample-app-%d{yyyy-MM-dd}-%i.log">
+      <PatternLayout>
+              <pattern>%d{ISO8601} %-5p [%c] %x &lt;%t&gt; - %m%n</pattern>
+      </PatternLayout>
+      <Policies>
+              <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+      </Policies>
+    </RollingFile>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+        <JsonLayout/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="io.openliberty.sample.system.SystemLivenessCheck" level="debug">
+      <AppenderRef ref="DailyRolling"/>
+    </Logger>
+    <Root level="debug">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+  </Loggers>
 </Configuration>

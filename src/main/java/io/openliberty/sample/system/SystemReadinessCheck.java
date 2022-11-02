@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 @Readiness
 @ApplicationScoped
 public class SystemReadinessCheck implements HealthCheck {
-    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger("sample-app");
+
     private static final String READINESS_CHECK = SystemResource.class.getSimpleName()
                                                  + " Readiness Check";
 
@@ -25,7 +25,6 @@ public class SystemReadinessCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        logger.error(logger.getClass());
 
         if (inMaintenance != null && inMaintenance.get().equalsIgnoreCase("true")) {
             return HealthCheckResponse.down(READINESS_CHECK);

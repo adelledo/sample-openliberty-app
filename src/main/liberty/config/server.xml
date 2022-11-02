@@ -11,8 +11,6 @@
 
     <variable name="default.http.port" defaultValue="9080"/>
     <variable name="default.https.port" defaultValue="9443"/>
-
-    <webApplication location="sample-app.war" contextRoot="/" />
     
     <mpMetrics authentication="false"/>
 
@@ -20,4 +18,12 @@
         httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>
 
     <variable name="io_openliberty_guides_system_inMaintenance" value="false"/>
+
+    <library id="log4jConfig">
+          <folder dir="/config" scanInterval="5s" />
+    </library>
+
+    <webApplication id="sample-app" location="sample-app.war" name="sample-app">
+          <classloader commonLibraryRef="log4jConfig"/>
+    </webApplication>
 </server>
