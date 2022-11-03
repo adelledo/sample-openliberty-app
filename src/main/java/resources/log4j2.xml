@@ -1,28 +1,31 @@
-<Configuration>
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error">
   <Properties>
-           <Property name="log-path">/logs</Property>
+           <Property name="basePath">/logs</Property>
   </Properties>
 
   <Appenders>
-    <RollingFile name="DailyRolling" fileName="${log-path}/sample-app.log" append="true"
-    filePattern="${log-path}/sample-app-%d{yyyy-MM-dd}-%i.log">
+    <RollingFile name="sample-api" fileName="${basePath}/sample-app.log"
+                 filePattern="${basePath}/sample-api-$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
       <PatternLayout>
-              <pattern>%d{ISO8601} %-5p [%c] %x &lt;%t&gt; - %m%n</pattern>
+                <Pattern>%d [%t] %p %c - %m%n</Pattern>
       </PatternLayout>
       <Policies>
-              <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="500 MB" />
       </Policies>
     </RollingFile>
-    <Console name="STDOUT" target="SYSTEM_OUT">
-        <JsonLayout/>
-    </Console>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %c %highlight{%level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} - %msg%n" />
+        </Console>
   </Appenders>
   <Loggers>
-    <Logger name="io.openliberty.sample.system.SystemLivenessCheck" level="debug">
-      <AppenderRef ref="DailyRolling"/>
-    </Logger>
-    <Root level="debug">
-      <AppenderRef ref="STDOUT"/>
-    </Root>
+    <Logger name="io.openliberty.sample.system" level="debug" additivity="false">
+            <AppenderRef ref="sample-api" level="debug" />
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Root level="debug" includeLocation="false">
+            <AppenderRef ref="Console" />
+        </Root>
   </Loggers>
 </Configuration>
