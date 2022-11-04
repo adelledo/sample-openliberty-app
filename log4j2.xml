@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error" monitorInterval="30">
+  <Properties>
+           <Property name="basePath">/home/billy/logs</Property>
+           <Property name="app">$${env:APP_NAME:-application}</Property>
+           <Property name="logLevel">$${env:LOG_LEVEL:-warn}</Property>
+  </Properties>
+
+  <Appenders>
+    <RollingFile name="${app}" fileName="${basePath}/${app}.log"
+                 filePattern="${basePath}/${app}-$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+      <PatternLayout>
+                <Pattern>%d [%t] %p %c - %m%n</Pattern>
+      </PatternLayout>
+      <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="500 MB" />
+                <!-- TODO delete old files -->
+      </Policies>
+    </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %c %highlight{%level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} - %msg%n" />
+        </Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="io.openliberty.sample.system" level="${logLevel}" additivity="false">
+            <AppenderRef ref="${app}"/>
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Root level="${logLevel}" includeLocation="false">
+            <AppenderRef ref="Console" />
+        </Root>
+  </Loggers>
+</Configuration>

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="error">
+<Configuration status="error" monitorInterval="5">
   <Properties>
-           <Property name="basePath">/logs</Property>
+           <Property name="basePath">/home/billy/logs</Property>
+           <Property name="app">$${env:APP_NAME:-application}</Property>
+           <Property name="logLevel">$${env:LOG_LEVEL:-warn}</Property>
   </Properties>
 
   <Appenders>
-    <RollingFile name="sample-api" fileName="${basePath}/sample-app.log"
-                 filePattern="${basePath}/sample-api-$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+    <RollingFile name="${app}" fileName="${basePath}/${app}.log"
+                 filePattern="${basePath}/${app}-$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
       <PatternLayout>
                 <Pattern>%d [%t] %p %c - %m%n</Pattern>
       </PatternLayout>
@@ -20,11 +22,11 @@
         </Console>
   </Appenders>
   <Loggers>
-    <Logger name="io.openliberty.sample.system" level="debug" additivity="false">
-            <AppenderRef ref="sample-api" level="debug" />
+    <Logger name="io.openliberty.sample.system" level="${logLevel}" additivity="false">
+            <AppenderRef ref="${app}"/>
             <AppenderRef ref="Console" />
         </Logger>
-        <Root level="debug" includeLocation="false">
+        <Root level="${logLevel}" includeLocation="false">
             <AppenderRef ref="Console" />
         </Root>
   </Loggers>

@@ -14,12 +14,13 @@ LABEL \
 COPY --chown=1001:0 --from=build\
     /code/src/main/liberty/config \
     /config/
-COPY --chown=1001:0 --from=build\
-    /code/src/main/java/resources/log4j2.xml \
-    /config/
 
 COPY --chown=1001:0 --from=build\
     /code/target/sample-app.war \
     /config/apps
+
+COPY --chown=1001:0 --from=build\
+    /code/log4j2.xml \
+    /config/
 
 RUN configure.sh
