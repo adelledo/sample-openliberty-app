@@ -18,18 +18,18 @@ public class SystemLivenessCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        logger.trace("This is a trace log");
+        //logger.trace("This is a trace log");
         
-        logger.debug("This is a debug log");
+        //logger.debug("This is a debug log");
 
-        logger.info("this is an info log");
+        //logger.info("this is an info log");
 
-        logger.warn("this is a warn log");
+        //logger.warn("this is a warn log");
 
-        logger.error("This is an error log");
+        //logger.error("This is an error log");
 
         logger.fatal("this is a fatal log");
-        System.out.println("This is a print statement");
+       System.out.println("This is a cool print statement");
         
         MemoryMXBean memBean = ManagementFactory.getMemoryMXBean();
         long memUsed = memBean.getHeapMemoryUsage().getUsed();
